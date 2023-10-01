@@ -45,6 +45,7 @@ class GameScene: SKScene {
     
     print("You are running a physics simulation in an Xcode playground.")
     
+      physicsWorld.gravity = CGVector(dx: 0, dy: 1.62)
     // Add the physics body toggle button (rectangle shape node)
     addChild(physicsToggle)
     
@@ -59,7 +60,7 @@ class GameScene: SKScene {
     
     // Set up its physics body using a rectangle
     floor.physicsBody = SKPhysicsBody(rectangleOf: floor.frame.size)
-    floor.physicsBody?.isDynamic = false // static, not moved by physics engine
+    floor.physicsBody?.isDynamic = true // static, not moved by physics engine
     floor.physicsBody?.affectedByGravity = false // ignores world gravity
     
     // Add the floor node to the scene

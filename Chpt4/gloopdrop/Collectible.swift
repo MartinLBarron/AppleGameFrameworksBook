@@ -23,7 +23,7 @@ class Collectible: SKSpriteNode {
   init(collectibleType: CollectibleType) {
     var texture: SKTexture!
     self.collectibleType = collectibleType
-
+    
     // Set the texture based on the type
     switch self.collectibleType {
     case .gloop:
@@ -31,14 +31,19 @@ class Collectible: SKSpriteNode {
     case .none:
       break
     }
-
+    
     // Call to super.init
     super.init(texture: texture, color: SKColor.clear, size: texture.size())
-
+    
     // Set up collectible
     self.name = "co_\(collectibleType)"
     self.anchorPoint = CGPoint(x: 0.5, y: 1.0)
     self.zPosition = Layer.collectible.rawValue
+    self.physicsBody = SKPhysicsBody(rectangleOf: self.size, center: CGPoint(x: 0.0, y: -self.size.height/2))
+    self.physicsBody?.affectedByGravity=false
+    self.physicsBody?.categoryBitMask = PhysicsCategory.collectible
+    self.physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.foreground
+    self.physicsBody? .collisionBitMask = PhysicsCategory.none
   }
 
   // Required init
@@ -61,5 +66,15 @@ class Collectible: SKSpriteNode {
     // Shrink first, then run fall action
     self.scale(to: CGSize(width: 0.25, height: 1.0))
     self.run(actionSequence, withKey: "drop")
+  }
+  
+  func collected() {
+    let removeFromParent = SKAction.removeFromParent()
+    self.run(removeFromParent)
+  }
+  
+  func missed(){
+    let removeFromParent = SKAction.removeFromParent()
+    self.run(removeFromParent)
   }
 }
